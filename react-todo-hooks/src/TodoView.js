@@ -1,41 +1,53 @@
-import React, { useState} from 'react'
-import Container from 'react-bootstrap/Container'
+import React, { useState, useCallback } from 'react'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
-import Card from 'react-bootstrap/Card'
+import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
+import { FaTrashAlt } from 'react-icons/fa'
 
 import './TodoView.css'
 
 
-function TodoView() {
-    const [todos, setTodos] = useState([
-        { title:"foo1", description:"lorem", isDone: false },
-        { title:"foo2", description:"lorem", isDone: false },
-        { title:"foo3", description:"lorem", isDone: false },
-        { title:"foo5", description:"lorem", isDone: false },
-        { title:"foo6", description:"lorem", isDone: false },
-        { title:"foo7", description:"lorem", isDone: false },
-    ])
+const TodoView = () => {
+  
+  const [lastID, setLastID] = useState(4)
 
-    return (
-        <Container>
-            {todos.map(todo => (
-                <Row><Todo todo={todo}/></Row>
-            ))}
-        </Container>
-    )
+  const [todos, setTodos] = useState([
+    { id:"1", title:"bring trash out" },
+    { id:"2", title:"clean appartment" },
+    { id:"3", title:"walk the dog" },
+    { id:"4", title:"cook something" },
+  ])
+  
+  const removeTodo = useCallback((todo) => {
+    var newTodos = todos
+    var index = newTodos.indexOf(todo)
+    newTodos.splice(index)
+    setTodos(newTodos)
+  })
+
+  const addTodo = useCallback((title) => {
+    setLastID = lastID + 1
+    setTodos({...todos, { id: lastID, title: title}})
+  })
+
+  return (
+    <Container>
+      {todos.map(todo => (
+        <Todo todo={todo} removeTodo={removeTodo}/>
+       ))}
+    </Container>
+  )
 }
 
-function Todo({ todo }) {
-    return (
-        <div>
-            <Row>
-                <Col><p>{todo.title}</p></Col>
-                <Col><p>{todo.description}</p></Col>
-            </Row>
-        </div>
-    )
+const Todo = (props) => {
+  return (
+    <Row>
+      <Col md={5}><p>{props.todo.title}</p></Col>
+      <Col md={1}><Button onClick={() => props.removeTodo(props.todo)}><FaTrashAlt/></Button></Col>
+      <Col md={6}></Col>
+    </Row>
+  )
 }
 
 export default TodoView

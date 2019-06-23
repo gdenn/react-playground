@@ -1,3 +1,7 @@
-.TodoView {
-    margin-left: 12px !important;
+.Todo {
+  padding: 20px 0px 0px 20px;
+}
+
+.TodoVidew {
+ width: 20rem !important;
 }
